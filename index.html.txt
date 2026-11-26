@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔒 Телефон заблокирован</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0a;
+    color: #00ff88;
+    font-family: 'Courier New', monospace;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    user-select: none;
+  }
+  .skull { font-size: 80px; animation: pulse 1s infinite; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+  }
+  h1 { font-size: 22px; margin: 15px 0; color: #ff0044; }
+  .timer {
+    font-size: 64px;
+    font-weight: bold;
+    color: #00ff88;
+    text-shadow: 0 0 20px #00ff88;
+    margin: 10px 0;
+  }
+  .msg { font-size: 14px; color: #888; margin-top: 10px; padding: 0 20px; }
+  .progress {
+    width: 80%;
+    height: 8px;
+    background: #222;
+    border-radius: 4px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  .bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff0044, #00ff88);
+    transition: width 1s linear;
+  }
+  .unlocked { color: #00ff88 !important; }
+</style>
+</head>
+<body>
+  <div class="skull" id="icon"></div>
+  <h1 id="title">ТЕЛЕФОН ЗАБЛОКИРОВАН</h1>
+  <div class="timer" id="timer">50</div>
+  <div class="msg" id="msg">Обнаружена подозрительная активность.<br>
+</div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+
+<script>
+  let timeLeft = 50;
+  const total = 50;
+  const timerEl = document.getElementById('timer');
+  const barEl = document.getElementById('bar');
+  const titleEl = document.getElementById('title');
+  const msgEl = document.getElementById('msg');
+  const iconEl = document.getElementById('icon');
+
+  // Небольшой "глитч" для атмосферы
+  const glitch = setInterval(() => {
+    if (Math.random() < 0.3) {
+      document.body.style.background = Math.random() < 0.5 ? '#0a0a0a' : '#001100';
+    }
+  }, 150);
+
+  const interval = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+    barEl.style.width = ((total - timeLeft) / total * 100) + '%';
+
+    if (timeLeft <= 10) timerEl.style.color = '#ff0044';
+
+    if (timeLeft <= 0) {
+      clearInterval(interval);
+      clearInterval(glitch);
+      document.body.style.background = '#0a0a0a';
+      iconEl.textContent = '✅';
+      iconEl.style.animation = 'none';
+      titleEl.textContent = 'РАЗБЛОКИРОВАНО';
+      titleEl.classList.add('unlocked');
+      timerEl.textContent = '0';
+      timerEl.style.color = '#00ff88';
+      msgEl.innerHTML = 'Шутка! <br>Ничего не заблокировано.';
+    }
+  }, 1000);
+</script>
+</body>
+</html>
